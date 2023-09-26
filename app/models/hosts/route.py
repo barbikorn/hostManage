@@ -6,7 +6,7 @@ from pymongo.collection import Collection
 from pydantic import BaseModel
 from bson import ObjectId
 
-from app.models.hosts.host import Host
+from app.models.hosts.host import Host, HostGet, HostCreate
 
 router = APIRouter()
 collection_name = "hosts"
@@ -16,7 +16,7 @@ collection = get_database_atlas("hosts", atlas_uri)[collection_name]
 host_db_manager = HostDatabaseManager(collection_name)
 
 
-@router.post("/", response_model=Host,include_in_schema=False)
+@router.post("/", response_model=HostCreate,include_in_schema=False)
 def create_host(host_data: Host):
     host_data_dict = host_data.dict()
     result = collection.insert_one(host_data_dict)
@@ -31,10 +31,10 @@ def create_host(host_data: Host):
 def get_all_hosts():
     hosts = []
     for host in collection.find():
-        hosts.append(Host(id=str(host["_id"]), **host))
+        hosts.append(id=str(host["_id"], **host))
     return hosts
 
-@router.get("/{host_id}", response_model=Host,include_in_schema=True)
+@router.get("/{host_id}", response_model=HostGet,include_in_schema=True)
 def get_host(host_id: str):
     host = collection.find_one({"_id": ObjectId(host_id)})
     if host:

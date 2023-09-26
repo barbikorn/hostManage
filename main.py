@@ -16,10 +16,6 @@ from fastapi.openapi.utils import get_openapi
 from app.models.hosts.route import router as hosts_router
 
 
-
-
-# from app.models.items.route import router as items_router
-# from app.models.shops.route import router as shops_router
 print("print from main")
 # mongol part
 app = FastAPI()
@@ -33,15 +29,15 @@ app.include_router(hosts_router, prefix="/hosts", tags=["hosts"])
 
 
 # ---------- My autherize Swagger ----------
-from fastapi.openapi.models import OAuthFlows as OAuthFlowsModel
-from fastapi.openapi.models import OAuthFlowAuthorizationCode as OAuthFlowAuthorizationCodeModel
-from fastapi.openapi.models import OAuthFlowPassword as OAuthFlowPasswordModel
-from fastapi.openapi.models import OAuthFlowImplicit as OAuthFlowImplicitModel
-from fastapi.openapi.models import OAuthFlowClientCredentials as OAuthFlowClientCredentialsModel
-from fastapi.openapi.models import OAuthFlowAuthorizationCode as OAuthFlowAuthorizationCodeModel
-from fastapi.openapi.models import OAuthFlows as OAuthFlowsModel
-from fastapi.openapi.models import OAuthFlowPassword as OAuthFlowPasswordModel
-from fastapi.openapi.models import OAuthFlowAuthorizationCode as OAuthFlowAuthorizationCodeModel
+# from fastapi.openapi.models import OAuthFlows as OAuthFlowsModel
+# from fastapi.openapi.models import OAuthFlowAuthorizationCode as OAuthFlowAuthorizationCodeModel
+# from fastapi.openapi.models import OAuthFlowPassword as OAuthFlowPasswordModel
+# from fastapi.openapi.models import OAuthFlowImplicit as OAuthFlowImplicitModel
+# from fastapi.openapi.models import OAuthFlowClientCredentials as OAuthFlowClientCredentialsModel
+# from fastapi.openapi.models import OAuthFlowAuthorizationCode as OAuthFlowAuthorizationCodeModel
+# from fastapi.openapi.models import OAuthFlows as OAuthFlowsModel
+# from fastapi.openapi.models import OAuthFlowPassword as OAuthFlowPasswordModel
+# from fastapi.openapi.models import OAuthFlowAuthorizationCode as OAuthFlowAuthorizationCodeModel
 
 # # Define your OAuth2 flows
 # oauth_flows = OAuthFlowsModel(
