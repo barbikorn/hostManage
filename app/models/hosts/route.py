@@ -17,7 +17,7 @@ host_db_manager = HostDatabaseManager(collection_name)
 
 
 @router.post("/", response_model=HostCreate,include_in_schema=False)
-def create_host(host_data: Host):
+def create_host(host_data: HostCreate):
     host_data_dict = host_data.dict()
     result = collection.insert_one(host_data_dict)
 
