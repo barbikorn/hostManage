@@ -23,7 +23,7 @@ def create_host(host_data: HostCreate):
 
     if result.acknowledged:
         created_host = collection.find_one({"_id": ObjectId(result.inserted_id)})
-        return Host(id=str(created_host["_id"]), **created_host)
+        return HostCreate(id=str(created_host["_id"]), **created_host)
     else:
         raise HTTPException(status_code=500, detail="Failed to create host")
 
@@ -31,7 +31,9 @@ def create_host(host_data: HostCreate):
 def get_all_hosts():
     hosts = []
     for host in collection.find():
-        hosts.append(id=str(host["_id"], **host))
+        host_id = str(host.pop('_id'))
+        host["id"] = host_id
+        hosts.append(host)
     return hosts
 
 @router.get("/{host_id}", response_model=HostGet,include_in_schema=True)
