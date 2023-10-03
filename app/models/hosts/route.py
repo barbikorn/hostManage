@@ -16,7 +16,7 @@ collection = get_database_atlas("hosts", atlas_uri)[collection_name]
 host_db_manager = HostDatabaseManager(collection_name)
 
 
-@router.post("/", response_model=HostCreate,include_in_schema=False)
+@router.post("/", response_model=HostCreate,include_in_schema=True)
 def create_host(host_data: HostCreate):
     host_data_dict = host_data.dict()
     result = collection.insert_one(host_data_dict)
@@ -62,7 +62,7 @@ async def get_host_by_filter(
         hosts.append(Host(id=str(host["_id"]), **host))
     return hosts
 
-@router.put("/{host_id}", response_model=Host,include_in_schema=False)
+@router.put("/{host_id}", response_model=Host,include_in_schema=True)
 def update_host(host_id: str, host_data: Host):
     result = collection.update_one({"_id": ObjectId(host_id)}, {"$set": host_data.dict()})
     if result.modified_count == 1:
