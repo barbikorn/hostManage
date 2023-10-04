@@ -1,4 +1,4 @@
-from typing import Dict, Optional, List
+from typing import Dict, Optional, List, Any
 from app.database import get_database_atlas
 from fastapi import HTTPException, APIRouter, Depends , Request, Query
 from host_manager import HostDatabaseManager
@@ -27,11 +27,12 @@ def create_host(host_data: HostCreate):
     else:
         raise HTTPException(status_code=500, detail="Failed to create host")
 
-@router.get("/", response_model=List[Host],include_in_schema=True)
+@router.get("/", response_model=List[Dict[str, Any]],include_in_schema=True)
 def get_all_hosts():
     hosts = []
     for host in collection.find():
         host_id = str(host.pop('_id'))
+        print("host_id",host_id)
         host["id"] = host_id
         hosts.append(host)
     return hosts
