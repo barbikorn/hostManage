@@ -14,6 +14,7 @@ class HostCreate(BaseModel) :
     uri : Optional[str]
 
 class HostGet(BaseModel) :
+    id : str
     token: Optional[str]
     name: Optional[str]
     databasename: Optional[str]

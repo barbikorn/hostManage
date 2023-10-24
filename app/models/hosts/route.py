@@ -16,28 +16,29 @@ collection = get_database_atlas("hosts", atlas_uri)[collection_name]
 host_db_manager = HostDatabaseManager(collection_name)
 
 
-@router.post("/", response_model=HostCreate,include_in_schema=True)
+@router.post("/", response_model=HostGet)
 def create_host(host_data: HostCreate):
     host_data_dict = host_data.dict()
     result = collection.insert_one(host_data_dict)
 
     if result.acknowledged:
-        created_host = collection.find_one({"_id": ObjectId(result.inserted_id)})
-        return HostCreate(id=str(created_host["_id"]), **created_host)
+        create_host = collection.find_one({"_id": ObjectId(result.inserted_id)})
+        create_host['id'] = str(create_host['_id'])  # Add 'id' key and convert ObjectId to string
+        print(create_host)
+        return HostGet(**create_host)
     else:
         raise HTTPException(status_code=500, detail="Failed to create host")
 
-@router.get("/", response_model=List[Dict[str, Any]],include_in_schema=True)
+@router.get("/", response_model=List[Dict[str, Any]])
 def get_all_hosts():
     hosts = []
     for host in collection.find():
         host_id = str(host.pop('_id'))
-        print("host_id",host_id)
         host["id"] = host_id
         hosts.append(host)
     return hosts
 
-@router.get("/{host_id}", response_model=HostGet,include_in_schema=True)
+@router.get("/{host_id}", response_model=HostGet)
 def get_host(host_id: str):
     host = collection.find_one({"_id": ObjectId(host_id)})
     if host:
