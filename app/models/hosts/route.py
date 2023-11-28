@@ -1,7 +1,6 @@
 from typing import Dict, Optional, List, Any
 from app.database import get_database_atlas
 from fastapi import HTTPException, APIRouter, Depends , Request, Query
-from host_manager import HostDatabaseManager
 from pymongo.collection import Collection
 from pymongo import errors
 from pydantic import BaseModel
@@ -14,26 +13,37 @@ collection_name = "hosts"
 atlas_uri = "mongodb+srv://doadmin:k2R0165xp4G8iV3E@host-manager-a6c7287d.mongo.ondigitalocean.com/admin?tls=true&authSource=admin"
 collection = get_database_atlas("hosts", atlas_uri)[collection_name]
 
-host_db_manager = HostDatabaseManager(collection_name)
-
 
 @router.post("/", response_model=HostGet)
 def create_host(host_data: HostCreate):
-    try:
-        # Create a unique index on the 'token' field
-        collection.create_index("token", unique=True)
-        
-        # Insert the host data into the collection
-        result = collection.insert_one(host_data.dict())
-        
-        if result.acknowledged:
-            host_id = str(result.inserted_id)
-            return HostGet(id=host_id, **host_data.dict())
-        else:
-            raise HTTPException(status_code=500, detail="Failed to create host")
-    except errors.DuplicateKeyError:
-        raise HTTPException(status_code=400, detail="Host with the same token already exists")
+    
+    # Insert the host data into the collection
+    result = collection.insert_one(host_data.dict())
+    
+    if result.acknowledged:
+        host_id = str(result.inserted_id)
+        return HostGet(id=host_id, **host_data.dict())
+    else:
+        raise HTTPException(status_code=500, detail="Failed to create host")
 
+
+# @router.post("/", response_model=HostGet)
+# def create_host(host_data: HostCreate):
+#     try:
+#         # Create a unique index on the 'token' field
+#         collection.create_index("token", unique=True)
+        
+#         # Insert the host data into the collection
+#         result = collection.insert_one(host_data.dict())
+        
+#         if result.acknowledged:
+#             host_id = str(result.inserted_id)
+#             return HostGet(id=host_id, **host_data.dict())
+#         else:
+#             raise HTTPException(status_code=500, detail="Failed to create host")
+#     except errors.DuplicateKeyError:
+#         raise HTTPException(status_code=400, detail="Host with the same token already exists")
+    
 @router.get("/", response_model=List[Dict[str, Any]])
 def get_all_hosts():
     hosts = []

@@ -4,7 +4,6 @@ from fastapi import FastAPI, HTTPException, Request, Depends, status, Header
 from typing import List, Optional, Dict ,Any, Union
 from bson import ObjectId
 # from app.models.users.user import User,UserUpdate,UserCreate, Token, TokenData
-from app.models.hosts.route import HostDatabaseManager
 from app.database import get_database_atlas
 from passlib.context import CryptContext
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
@@ -14,6 +13,7 @@ from fastapi.openapi.utils import get_openapi
 
 
 from app.models.hosts.route import router as hosts_router
+from app.models.queues.route import router as queues_router
 
 
 print("print from main")
@@ -21,6 +21,7 @@ print("print from main")
 app = FastAPI()
 
 app.include_router(hosts_router, prefix="/hosts", tags=["hosts"])
+app.include_router(queues_router, prefix="/queues", tags=["queues"])
 
 
 
