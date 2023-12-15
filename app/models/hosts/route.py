@@ -1,7 +1,8 @@
 from typing import Dict, Optional, List, Any
 from app.database import get_database_atlas
 from fastapi import HTTPException, APIRouter, Depends , Request, Query
-from pymongo.collection import Collection
+from pymongo import  IndexModel
+from pymongo import ASCENDING
 from pymongo import errors
 from pydantic import BaseModel
 from bson import ObjectId
@@ -13,13 +14,22 @@ collection_name = "hosts"
 atlas_uri = "mongodb+srv://doadmin:k2R0165xp4G8iV3E@host-manager-a6c7287d.mongo.ondigitalocean.com/admin?tls=true&authSource=admin"
 collection = get_database_atlas("hosts", atlas_uri)[collection_name]
 
+# Assuming 'collection' is your MongoDB collection object
+# Create a unique index on the 'token' field
+
+
+
 
 @router.post("/", response_model=HostGet)
 def create_host(host_data: HostCreate):
-    
+    # Check if the token already exists
+    existing_host = collection.find_one({"token": host_data.token})
+    if existing_host:
+        raise HTTPException(status_code=400, detail="Token already exists")
+
     # Insert the host data into the collection
     result = collection.insert_one(host_data.dict())
-    
+
     if result.acknowledged:
         host_id = str(result.inserted_id)
         return HostGet(id=host_id, **host_data.dict())
