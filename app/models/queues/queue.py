@@ -16,6 +16,7 @@ class QueueCreate(BaseModel) :
     e_id : Optional[str]
 
 class QueueGet(BaseModel) :
+    id:Optional[str]
     method: Optional[str]
     path: Optional[str]
     collection : Optional[str]

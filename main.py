@@ -11,7 +11,6 @@ from typing_extensions import Annotated
 from fastapi.openapi.utils import get_openapi
 
 
-
 from app.models.hosts.route import router as hosts_router
 from app.models.queues.route import router as queues_router
 
@@ -45,7 +44,7 @@ app.include_router(queues_router, prefix="/queues", tags=["queues"])
 #     password=OAuthFlowPasswordModel(tokenUrl="/token"),
 #     authorizationCode=OAuthFlowAuthorizationCodeModel(
 #         authorizationUrl="/auth", tokenUrl="/token"
-#     ),
+#     ),ไ
 #     clientCredentials=OAuthFlowClientCredentialsModel(tokenUrl="/token"),
 #     implicit=OAuthFlowImplicitModel(authorizationUrl="/auth"),
 # )

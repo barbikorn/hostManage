@@ -5,6 +5,8 @@ from pymongo.collection import Collection
 from pymongo import errors
 from pydantic import BaseModel
 from bson import ObjectId
+from fastapi.encoders import jsonable_encoder
+from lib.obj_encode import encode_object_id
 
 from app.models.queues.queue import Queue, QueueGet, QueueCreate
 
@@ -38,8 +40,11 @@ def get_all_queues():
     for queue in collection.find():
         queue_id = str(queue.pop('_id'))
         queue["id"] = queue_id
-        queues.append(queue)
-    return queues
+        print(queue)
+        queues.append(QueueGet(**queue))
+
+    encoded_queues = jsonable_encoder(queues, default=encode_object_id)
+    return encoded_queues
 
 @router.get("/{queue_id}", response_model=QueueGet)
 def get_queue(queue_id: str):
