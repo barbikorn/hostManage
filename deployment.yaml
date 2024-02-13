@@ -1,0 +1,42 @@
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: fastapi-app-deployment
+  labels:
+    app: fastapi-app
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: fastapi-app
+  template:
+    metadata:
+      labels:
+        app: fastapi-app
+    spec:
+      containers:
+      - name: fastapi-app-container
+        image: fastapi-app:latest  # Replace with your image path
+        ports:
+        - containerPort: 8000
+        resources:
+          limits:
+            cpu: "1"
+            memory: "500Mi"
+          requests:
+            cpu: "0.5"
+            memory: "200Mi"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: fastapi-app-service
+spec:
+  selector:
+    app: fastapi-app
+  ports:
+    - protocol: TCP
+      port: 8000
+      targetPort: 8000
+  type: LoadBalancer
